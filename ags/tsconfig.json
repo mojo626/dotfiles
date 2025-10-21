@@ -9,6 +9,14 @@
     // "checkJs": true,
     // "allowJs": true,
     "jsx": "react-jsx",
-    "jsxImportSource": "ags/gtk4"
+    "jsxImportSource": "ags/gtk4",
+    "paths": {
+            "astal": [
+                "/usr/share/astal/gjs"
+            ],
+            "astal/*": [
+                "/usr/share/astal/gjs/*"
+            ]
+        },
   }
 }

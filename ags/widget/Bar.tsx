@@ -5,9 +5,11 @@ import { createPoll } from "ags/time"
 import Hyprland from "gi://AstalHyprland"
 import { createBinding, createState, With } from "ags"
 import Workspaces from "./Workspaces"
+import Time from "./Time"
+import ActiveWindow from "./ActiveWindow"
 
 export default function Bar(gdkmonitor: Gdk.Monitor) {
-  const time = createPoll("", 1000, "date")
+  
   const { TOP, LEFT, RIGHT } = Astal.WindowAnchor
 
   const hyprland = Hyprland.get_default()
@@ -28,26 +30,21 @@ export default function Bar(gdkmonitor: Gdk.Monitor) {
     >
       
       <centerbox cssName="centerbox">
-        <button
-          $type="start"
-          onClicked={() => execAsync("echo hello").then(console.log)}
-          hexpand
-          halign={Gtk.Align.CENTER}
-        >
-          {/* <With value={focusedTitle}>
-            {(client) => <label label={client.title} />}
-          </With> */}
-          <Workspaces></Workspaces>
-          
-        </button>
-        <box $type="center" />
-        <menubutton $type="end" hexpand halign={Gtk.Align.CENTER}>
-          <label label={time} />
-          <popover>
-            <Gtk.Calendar />
-          </popover>
-        </menubutton>
+        <box halign={Gtk.Align.START} $type="start">
+            <Time />
+        </box>
+
+        <box halign={Gtk.Align.CENTER} $type="center">
+            <ActiveWindow />
+        </box>
+
+        <box halign={Gtk.Align.END} $type="end">
+            <Time />
+        </box>
+
       </centerbox>
+
+      
     </window>
   )
 }
