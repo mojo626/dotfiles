@@ -31,7 +31,7 @@ export default function Bar(gdkmonitor: Gdk.Monitor) {
       
       <centerbox cssName="centerbox">
         <box halign={Gtk.Align.START} $type="start">
-            <Time />
+            <Workspaces />
         </box>
 
         <box halign={Gtk.Align.CENTER} $type="center">
