@@ -8,7 +8,7 @@ window.Bar {
   font-weight: bold;
 
   > centerbox {
-    background: $bg-color;
+    /*background: $bg-color;*/
     border-radius: 10px;
     margin: 15px;
     margin-bottom: 2px;
@@ -16,6 +16,7 @@ window.Bar {
   }
 
   button {
+    background: $bg-color;
     border-radius: 8px;
     margin: 2px;
   }
