@@ -7,6 +7,8 @@ import { createBinding, createState, With } from "ags"
 import Workspaces from "./Workspaces"
 import Time from "./Time"
 import ActiveWindow from "./ActiveWindow"
+import Power from "./Power"
+import Sound from "./Sound"
 
 export default function Bar(gdkmonitor: Gdk.Monitor) {
   
@@ -39,7 +41,9 @@ export default function Bar(gdkmonitor: Gdk.Monitor) {
         </box>
 
         <box halign={Gtk.Align.END} $type="end">
+   	    <Sound /> 
             <Time />
+            <Power />
         </box>
 
       </centerbox>

@@ -1,0 +1,110 @@
+*{
+	all: unset;
+	font-family: feather;
+	font-family: DaddyTimeMono NF;
+}
+
+.bar {
+  background: rgba(20, 20, 20, 0.8);
+  color: white;
+  padding: 6px 12px;
+  font-family: "Inter", sans-serif;
+  font-size: 13px;
+    border-radius: 16px;
+}
+
+.center_modules {
+  padding: 5px 10px;
+}
+
+.right_modules {
+  padding: 5px 10px;
+}
+
+.left_modules {
+  padding: 5px 10px;
+}
+
+.module_wif {
+  background-color: transparent;
+}
+
+button {
+  padding: 0px;
+  background: none;
+  border: none;
+}
+
+
+
+/* Music Popup*/
+
+.music_btn_prev, .music_btn_play, .music_btn_next {
+	font-family: Iosevka Nerd Font;
+}
+.music_btn_prev {
+	color: #ffffff;
+	font-size : 32px;
+	font-weight : normal;
+	margin: 0px 0px 0px 0px;
+}
+.music_btn_play {
+	color: #ffffff;
+	font-size : 32px;
+	font-weight : normal;
+	margin: 0px 0px 0px 0px;
+}
+.music_btn_next {
+	color: #ffffff;
+	font-size : 32px;
+	font-weight : normal;
+	margin: 0px 0px 0px 0px;
+}
+
+
+.music_pop {
+    background-color: #0f0f17;
+	border-radius: 16px;
+  padding: 10px;
+}
+
+.music_cover_art {
+	background-size: cover;
+	background-position: center;
+	min-height: 170px;
+    box-shadow: 5px 5px 5px 5px #06060b;
+	min-width: 170px;
+	margin: 20px;
+	border-radius: 20px;
+}
+
+
+scale trough {
+  all: unset;
+  background-color: #22242b;
+  box-shadow: 0 2px 3px 2px #06060b;
+  border-radius: 16px;
+  min-height: 10px;
+  min-width: 70px;
+  margin: 0px 10px 0px 0px;
+}
+
+.music_bar scale trough highlight {
+	all: unset;
+    background-image: linear-gradient(to right, #afcee0 30%, #a1bdce 50%, #77a5bf 100% *50);
+	border-radius: 24px;
+}
+
+.music_info {
+  padding: 40px 10px;
+}
+
+.music_bar scale trough {
+	all: unset;
+	background-color: #232232;
+    box-shadow: 0 6px 5px 2px #06060b;
+	border-radius: 24px;
+	min-height: 13px;
+	min-width: 190px;
+	margin : -10px 10px 20px 0px;
+}

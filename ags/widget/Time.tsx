@@ -3,7 +3,7 @@ import { createPoll } from "ags/time"
 
 
 export default function Time() {
-    const time = createPoll("", 1000, "date")
+    const time = createPoll("", 1000, "date '+%l:%M:%S %b %d'")
 
     return (
         <button halign={Gtk.Align.CENTER}>

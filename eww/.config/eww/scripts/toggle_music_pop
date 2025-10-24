@@ -1,0 +1,9 @@
+#!/usr/bin/env bash
+
+STATUS="$(eww -c $HOME/.config/eww/bar/ active-windows | grep 'music_win')"
+
+if [[ $STATUS == "" ]]; then
+	eww -c $HOME/.config/eww/bar/ open music_win
+else
+    eww -c $HOME/.config/eww/bar/ close music_win
+fi

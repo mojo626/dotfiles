@@ -1,0 +1,85 @@
+#!/usr/bin/env bash
+
+STATUS="$(playerctl status)"
+CACHE_DIR="/tmp/eww-covers"
+
+get_artist() {
+    artist=`playerctl metadata --format '{{artist}}'`
+
+    echo $artist
+}
+
+get_title() {
+    title=`playerctl metadata --format '{{title}}'`
+
+    echo $title
+}
+
+# TODO: add a way to set the time so you can scrub in the widget
+get_time() {
+    current=`playerctl position`
+    length=`playerctl metadata --format '{{mpris:length}}'` 
+
+    percent=`echo "($current * 100) / ( $length / 1000000)" | bc -l`
+
+    echo $percent
+}
+
+get_cover() {
+    mkdir -p $CACHE_DIR
+
+    RAW_COVER="$(playerctl metadata --format '{{mpris:artUrl}}' 2>/dev/null)"
+
+    # No cover? return empty
+    if [[ -z "$RAW_COVER" ]]; then
+        echo ""
+        return
+    fi
+
+    # If it's a file:// path just strip the prefix and return
+    if [[ "$RAW_COVER" == file://* ]]; then
+        echo "${RAW_COVER#file://}"
+        return
+    fi
+
+    # Otherwise assume URL — cache it
+    HASH=$(echo -n "$RAW_COVER" | sha256sum | cut -d ' ' -f1)
+    CACHED_FILE="$CACHE_DIR/$HASH.jpg"
+
+    # Only download if not already cached
+    if [[ ! -f "$CACHED_FILE" ]]; then
+        curl -s --max-time 5 "$RAW_COVER" -o "$CACHED_FILE"
+    fi
+
+    # Cleanup old cached files (anything not the current hash)
+    find "$CACHE_DIR" -type f ! -name "$HASH.jpg" -delete
+
+    echo "$CACHED_FILE"
+}
+
+get_status() {
+    
+    if [[ $STATUS == "Playing" ]]; then
+		echo ""
+	else
+		echo ""
+	fi
+}
+
+if [[ "$1" == "--artist" ]]; then
+	get_artist
+elif [[ "$1" == "--title" ]]; then
+	get_title
+elif [[ "$1" == "--cover" ]]; then
+	get_cover
+elif [[ "$1" == "--status" ]]; then
+	get_status
+elif [[ "$1" == "--prev" ]]; then
+	playerctl previous
+elif [[ "$1" == "--next" ]]; then
+	playerctl next
+elif [[ "$1" == "--toggle" ]]; then
+	playerctl play-pause
+elif [[ "$1" == "--time" ]]; then
+	get_time
+fi

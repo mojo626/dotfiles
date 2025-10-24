@@ -10,6 +10,7 @@
     // "allowJs": true,
     "jsx": "react-jsx",
     "jsxImportSource": "ags/gtk4",
+    "types": ["@girs/gjs", "@girs/gtk-4.0", "@girs/gobject-2.0", "@girs/glib-2.0"],
     "paths": {
             "astal": [
                 "/usr/share/astal/gjs"

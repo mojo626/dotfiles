@@ -6,5 +6,7 @@ app.start({
   css: style,
   main() {
     app.get_monitors().map(Bar)
+    const pwr = app.get_window("PowerBar")
+    if (pwr) pwr.visible = true
   },
 })

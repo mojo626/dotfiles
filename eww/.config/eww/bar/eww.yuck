@@ -1,0 +1,142 @@
+(defpoll clock_time :interval "5m" "date +\%I")
+(defpoll clock_minute :interval "5s" "date +\%M")
+(defpoll clock_second :interval "100ms" "date +\%S")
+(defpoll clock_date :interval "10h" "date '+%m/%d'")
+(defvar time_rev false)
+(defvar wifi_rev false)
+(defvar eww "eww -c $HOME/.config/eww/bar/")
+
+(defpoll COL_WLAN :interval "5s" "bash ~/.config/eww/scripts/wifi --COL")
+(defpoll ESSID_WLAN :interval "5s" "bash ~/.config/eww/scripts/wifi --ESSID")
+(defpoll WLAN_ICON :interval "1m" "bash ~/.config/eww/scripts/wifi --ICON")
+
+(defpoll music_status :interval "500ms"  "bash ~/.config/eww/scripts/music --status")
+(defpoll music_title :interval "1s"  "bash ~/.config/eww/scripts/music --title")
+(defpoll music_artist :interval "1s"  "bash ~/.config/eww/scripts/music --artist")
+(defpoll music_cover :interval "1s"  "bash ~/.config/eww/scripts/music --cover")
+(defpoll music_progress :interval "500ms"  "bash ~/.config/eww/scripts/music --time")
+
+
+(defwidget bar [] 
+  (box :orientation "h"
+    (left)
+    (center)
+    (right)))
+
+(defwindow bar
+  :monitor 0
+  :windowtype "dock"
+  :geometry (geometry :x "0%"
+                      :y "5px"
+                      :width "98.5%"
+                      :height "10px"
+                      :anchor "top center")
+  :reserve (struts :side "top" :distance "4%")
+  :exclusive true
+  :stacking "fg"
+  (bar))
+
+
+
+(defwidget right []
+	(box :orientation "h" 
+		 :space-evenly false  
+         :halign "end"
+		 :class "right_modules"
+     :spacing 10
+  
+  (clock)
+  (wifi)
+  (power))
+)
+
+(defwidget left []
+  (box :orientation "h" 
+    :space-evenly false  
+        :halign "start"
+    :class "left_modules"
+  (menubutton))
+)
+
+(defwidget center []
+  (box :orientation "h" 
+    :space-evenly false  
+        :halign "center"
+    :class "center_modules"
+  (music))
+)
+
+
+
+
+(defwidget clock []
+  (eventbox :onhover "${eww} update time_rev=true" :onhoverlost "${eww} update time_rev=false"
+    (box :class "module" :space-evenly "false" :orientation "h" :spacing 3
+      (label :text clock_time)
+      (label :text ":")
+      (label :text clock_minute)
+      (label :text ":")
+      (label :text clock_second)
+      (revealer :transition "slideleft" :reveal time_rev :duration "350ms"
+        (label :text clock_date)
+      ) 
+    )
+  )
+)
+
+(defwidget wifi []
+    (box :vexpand "false" :hexpand "false" :space-evenly "false" :orientation "h"
+      (button :class "module-wif" :onclick "networkmanager_dmenu" :wrap "false" :limit-width 12  WLAN_ICON)
+      
+    )
+)
+
+(defwidget power []
+    (box :vexpand "false" :hexpand "false" :space-evenly "false" :orientation "h"
+      (button :class "module-power" :onclick "hyprctl dispatch exit" :wrap "false" :limit-width 12  (label :text ""))
+      
+    )
+)
+
+(defwidget music []
+  (eventbox :onclick "bash ~/.config/eww/scripts/toggle_music_pop"
+    (box :space-evenly "false" :orientation "h" :spacing 5
+      (label :text music_title :limit-width 25)
+      (label :text "-")
+      (label :text music_artist :limit-width 25)
+    )
+  )
+)
+
+(defwidget menubutton []
+  (box :vexpand "false" :hexpand "false" :space-evenly "false" :orientation "h"
+      (button :class "module-power" :onclick "" :wrap "false" :limit-width 12  (label :text "󱄅"))
+      
+  )
+)
+
+
+
+;; Music popup
+
+(defwindow music_win :stacking "fg" :focusable "false" :screen 1 :monitor 0
+			    :geometry (geometry :x "0" :y "5px" :width 428 :height 104 :anchor "top center")
+			     				(music_pop))
+
+(defwidget music_pop []
+  (box :orientation "h" :space-evenly "false" :class "music_pop"
+    (box :class "music_cover_art" :vexpand "false" :hexpand "false" :style "background-image: url('${music_cover}');")
+    (box :class "music_info" :orientation "v" :spacing 20 :space-evenly "false" :vexpand "true" :hexpand "false"
+      (label :text music_title :halign "center" :wrap "true" :limit-width 25 )
+      (label :text music_artist :halign "center" :wrap "true" :limit-width 25)
+      (box :orientation "h" :spacing 15 :halign "center" :space-evenly "false" :vexpand "false" :hexpand "false"
+					(button :class "music_btn_prev" :onclick "bash ~/.config/eww/scripts/music --prev" "")
+					(button :class "music_btn_play" :onclick "bash ~/.config/eww/scripts/music --toggle" music_status)
+					(button :class "music_btn_next" :onclick "bash ~/.config/eww/scripts/music --next" ""))
+				(box :class "music_bar" :vexpand "false" :hexpand "false" 
+					(scale :min 0 :active "false" :max 100 :value music_progress))
+    )
+    
+  )
+)
+  

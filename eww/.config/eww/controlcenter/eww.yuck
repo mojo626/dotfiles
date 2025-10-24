@@ -1,0 +1,18 @@
+
+
+
+(defwidget controlcenter [] 
+  (box :orientation "h"
+    (label :text "Hello")))
+
+(defwindow controlcenter
+  :monitor 0
+  :windowtype "dock"
+  :geometry (geometry :x "0%"
+                      :y "5px"
+                      :width "30%"
+                      :height "80%"
+                      :anchor "left top")
+  :reserve (struts :side "top" :distance "4%")
+  :stacking "fg"
+  (controlcenter))
