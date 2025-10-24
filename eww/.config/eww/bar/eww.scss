@@ -8,24 +8,33 @@ $background: #0f0f17;
 }
 
 .bar {
-  background: $background;
   color: white;
-  padding: 6px 12px;
   font-family: "Inter", sans-serif;
-  font-size: 13px;
-    border-radius: 16px;
+  
 }
 
 .center_modules {
   padding: 5px 10px;
+  background: $background;
+  padding: 10px 12px;
+  font-size: 13px;
+    border-radius: 16px;
 }
 
 .right_modules {
   padding: 5px 10px;
+  background: $background;
+  padding: 10px 12px;
+  font-size: 13px;
+    border-radius: 16px;
 }
 
 .left_modules {
   padding: 5px 10px;
+  background: $background;
+  padding: 10px 12px;
+  font-size: 13px;
+    border-radius: 16px;
 }
 
 .module_wif {
@@ -47,38 +56,46 @@ button {
 }
 .music_btn_prev {
 	color: #ffffff;
-	font-size : 32px;
+	font-size : 22px;
 	font-weight : normal;
 	margin: 0px 0px 0px 0px;
 }
 .music_btn_play {
 	color: #ffffff;
-	font-size : 32px;
+	font-size : 22px;
 	font-weight : normal;
 	margin: 0px 0px 0px 0px;
 }
 .music_btn_next {
 	color: #ffffff;
-	font-size : 32px;
+	font-size : 22px;
 	font-weight : normal;
 	margin: 0px 0px 0px 0px;
 }
 
 
-.music_pop {
+.center_pop {
     background-color: $background;
 	border-radius: 16px;
-  padding: 10px;
+  	padding: 10px;
 }
 
 .music_cover_art {
 	background-size: cover;
 	background-position: center;
-	min-height: 170px;
-    box-shadow: 5px 5px 5px 5px #06060b;
 	min-width: 170px;
-	margin: 20px;
+	min-height: 170px;
+
+    box-shadow: 5px 5px 5px 5px #06060b;
+
+	margin: 10px;
 	border-radius: 20px;
+}
+
+.center_time {
+	font-size: 30px;
+	font-weight: bold;
+	font-family:Arial, Helvetica, sans-serif;
 }
 
 
@@ -99,7 +116,7 @@ scale trough {
 }
 
 .music_info {
-  padding: 40px 10px;
+  padding: 0px 10px;
 }
 
 .music_bar scale trough {
@@ -109,5 +126,31 @@ scale trough {
 	border-radius: 24px;
 	min-height: 13px;
 	min-width: 190px;
-	margin : -10px 10px 20px 0px;
+	margin : 0px 10px 20px 0px;
+}
+
+
+.cal:selected {
+	background-color: #476b80;
+}
+
+.cal.header {
+	background-color:#476b80;
+	border-radius: 8px 8px 0px 0px;
+	padding-top: 0px;
+}
+
+.cal {
+	background-color:#232232;
+	border-radius: 8px;
+	padding-bottom: 7px;
+}
+
+.cal:indeterminate {
+	color: #999999;
+}
+
+
+.cal.button {
+	background: none;
 }

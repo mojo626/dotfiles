@@ -45,7 +45,7 @@
 		 :class "right_modules"
      :spacing 10
   
-  (clock)
+  
   (wifi)
   (power))
 )
@@ -63,7 +63,9 @@
     :space-evenly false  
         :halign "center"
     :class "center_modules"
-  (music))
+
+    (clock)
+    (music))
 )
 
 
@@ -100,7 +102,7 @@
 )
 
 (defwidget music []
-  (eventbox :onclick "bash ~/.config/eww/scripts/toggle_music_pop"
+  (eventbox :onclick "bash ~/.config/eww/scripts/toggle_center_pop"
     (box :space-evenly "false" :orientation "h" :spacing 5
       (label :text music_title :limit-width 25)
       (label :text "-")
@@ -120,24 +122,38 @@
 
 ;; Music popup
 
-(defwindow music_win :stacking "fg" :focusable "false" :screen 1 :monitor 0
-			    :geometry (geometry :x "0" :y "5px" :width 428 :height 104 :anchor "top center")
-			     				(music_pop))
+(defwindow center_win :stacking "fg" :focusable "false" :screen 1 :monitor 0
+			    :geometry (geometry :x "0" :y "5px" :width 528 :height 104 :anchor "top center")
+			     				(center_pop))
 
-(defwidget music_pop []
-  (box :orientation "h" :space-evenly "false" :class "music_pop"
+(defwidget center_music_info []
+  (box :class "music_info" :orientation "v" :spacing 10 :space-evenly "false" :vexpand "true" :hexpand "false"
     (box :class "music_cover_art" :vexpand "false" :hexpand "false" :style "background-image: url('${music_cover}');")
-    (box :class "music_info" :orientation "v" :spacing 20 :space-evenly "false" :vexpand "true" :hexpand "false"
-      (label :text music_title :halign "center" :wrap "true" :limit-width 25 )
-      (label :text music_artist :halign "center" :wrap "true" :limit-width 25)
-      (box :orientation "h" :spacing 15 :halign "center" :space-evenly "false" :vexpand "false" :hexpand "false"
-					(button :class "music_btn_prev" :onclick "bash ~/.config/eww/scripts/music --prev" "󰒮")
-					(button :class "music_btn_play" :onclick "bash ~/.config/eww/scripts/music --toggle" music_status)
-					(button :class "music_btn_next" :onclick "bash ~/.config/eww/scripts/music --next" "󰒭"))
-				(box :class "music_bar" :vexpand "false" :hexpand "false" 
-					(scale :min 0 :active "false" :max 100 :value music_progress))
+    (label :text music_title :halign "center" :wrap "true" :limit-width 25 )
+    (label :text music_artist :halign "center" :wrap "true" :limit-width 25)
+    (box :orientation "h" :spacing 15 :halign "center" :space-evenly "false" :vexpand "false" :hexpand "false"
+        (button :class "music_btn_prev" :onclick "bash ~/.config/eww/scripts/music --prev" "󰒮")
+        (button :class "music_btn_play" :onclick "bash ~/.config/eww/scripts/music --toggle" music_status)
+        (button :class "music_btn_next" :onclick "bash ~/.config/eww/scripts/music --next" "󰒭"))
+      (box :class "music_bar" :vexpand "false" :hexpand "false" 
+        (scale :min 0 :active "false" :max 100 :value music_progress))
+  )
+)
+
+(defwidget center_pop []
+  (box :orientation "h" :space-evenly "true" :class "center_pop" :spacing 20
+    (box :orientation "v" :space-evenly "false" :spacing 20
+    (box :orientation "v" :space-evenly "false" :halign "center"
+      (label :class "center_time" :text "${clock_time} : ${clock_minute}")
+      (label :text "Weekday, Month day" :style "font-size: 15px; padding-top: 5px;")
     )
+      
+      (calendar :class "cal")
+    )
+    (center_music_info)
     
   )
 )
   
+
+;; Can use hyprctl workspaces -j to get json data

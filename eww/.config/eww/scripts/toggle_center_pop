@@ -1,0 +1,9 @@
+#!/usr/bin/env bash
+
+STATUS="$(eww -c $HOME/.config/eww/bar/ active-windows | grep 'center_win')"
+
+if [[ $STATUS == "" ]]; then
+	eww -c $HOME/.config/eww/bar/ open center_win
+else
+    eww -c $HOME/.config/eww/bar/ close center_win
+fi
