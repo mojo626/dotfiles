@@ -79,7 +79,8 @@
       (label :text clock_second)
       (revealer :transition "slideleft" :reveal time_rev :duration "350ms"
         (label :text clock_date)
-      ) 
+      )
+       
     )
   )
 )
@@ -130,9 +131,9 @@
       (label :text music_title :halign "center" :wrap "true" :limit-width 25 )
       (label :text music_artist :halign "center" :wrap "true" :limit-width 25)
       (box :orientation "h" :spacing 15 :halign "center" :space-evenly "false" :vexpand "false" :hexpand "false"
-					(button :class "music_btn_prev" :onclick "bash ~/.config/eww/scripts/music --prev" "")
+					(button :class "music_btn_prev" :onclick "bash ~/.config/eww/scripts/music --prev" "󰒮")
 					(button :class "music_btn_play" :onclick "bash ~/.config/eww/scripts/music --toggle" music_status)
-					(button :class "music_btn_next" :onclick "bash ~/.config/eww/scripts/music --next" ""))
+					(button :class "music_btn_next" :onclick "bash ~/.config/eww/scripts/music --next" "󰒭"))
 				(box :class "music_bar" :vexpand "false" :hexpand "false" 
 					(scale :min 0 :active "false" :max 100 :value music_progress))
     )

@@ -1,0 +1,86 @@
+#!/usr/bin/env bash
+
+#written by chatGPT...
+set -uo pipefail
+
+FIFO="/tmp/eww-cava.fifo"
+CAVA_BIN="$(command -v cava || true)"
+EWW_BIN="$(command -v eww || true)"
+PLAYERCTL="$(command -v playerctl || true)"
+
+# Characters for style 1 (low -> high)
+BLOCKS=("▁" "▂" "▃" "▄" "▅" "▆" "▇" "█")
+BAR_COUNT=5   # must match 'bars' in cava config
+
+# Make sure eww exists
+if [[ -z "$EWW_BIN" ]]; then
+  echo "eww not found in PATH" >&2
+  exit 1
+fi
+
+# Create FIFO if missing
+if [[ ! -p "$FIFO" ]]; then
+  rm -f "$FIFO"
+  mkfifo "$FIFO"
+fi
+
+# Start cava if it's available and not already running
+if [[ -n "$CAVA_BIN" ]]; then
+  # If cava is already writing to FIFO, don't start another copy
+  if ! pgrep -af "cava" >/dev/null; then
+    # Run cava in background; it will write raw ASCII frames to the FIFO
+    # cava will read its config from ~/.config/cava/config by default
+    nohup "$CAVA_BIN" >/dev/null 2>&1 &
+    sleep 0.2
+  fi
+fi
+
+# Read from FIFO continuously
+# Cava ASCII raw output formats one frame per newline with whitespace-separated values
+while IFS= read -r line; do
+  # ensure we have numbers; trim surrounding whitespace
+  frame="$(echo "$line" | tr -s ' ' )"
+  # create array of values
+  read -r -a vals <<< "$frame"
+
+  # If we don't have enough values, skip
+  if [[ "${#vals[@]}" -lt "$BAR_COUNT" ]]; then
+    continue
+  fi
+
+  # convert numeric values (string) to 0..7 blocks
+  bars_out=""
+  for i in $(seq 0 $((BAR_COUNT - 1))); do
+    v="${vals[$i]}"
+    # sanitize non-numeric
+    if ! [[ "$v" =~ ^[0-9]+$ ]]; then
+      v=0
+    fi
+    # Cava ascii uses 0..(e.g.)255 (depends on bit_format). Map to 0..7.
+    # Use a safe mapping: clamp at 0..65535 just in case
+    maxval=65535
+    if [[ "$v" -gt $maxval ]]; then
+      v=$maxval
+    fi
+
+    # map to 0..7
+    idx=$(( (v * 8) / (maxval + 1) ))
+    if [[ $idx -gt 7 ]]; then idx=7; fi
+    if [[ $idx -lt 0 ]]; then idx=0; fi
+
+    bars_out+="${BLOCKS[$idx]}"
+  done
+
+  # Check playback status; if playing, update Eww, otherwise clear (collapse)
+  STATUS="$("$PLAYERCTL" status 2>/dev/null || echo "Stopped")"
+  if [[ "$STATUS" == "Playing" ]]; then
+    # Update variable named 'visual_bars' (see eww.yuck below)
+    # Use eww update <var> <json-value>
+    # eww accepts raw strings, but to be safe we pass plain string value
+    "$EWW_BIN" update visual_bars "$bars_out"
+  else
+    # collapse (empty) when not playing
+    "$EWW_BIN" update visual_bars ""
+  fi
+
+done < "$FIFO"

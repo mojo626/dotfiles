@@ -1,3 +1,6 @@
+$background: #0f0f17;
+
+
 *{
 	all: unset;
 	font-family: feather;
@@ -5,7 +8,7 @@
 }
 
 .bar {
-  background: rgba(20, 20, 20, 0.8);
+  background: $background;
   color: white;
   padding: 6px 12px;
   font-family: "Inter", sans-serif;
@@ -63,7 +66,7 @@ button {
 
 
 .music_pop {
-    background-color: #0f0f17;
+    background-color: $background;
 	border-radius: 16px;
   padding: 10px;
 }
