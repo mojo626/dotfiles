@@ -6,16 +6,20 @@
 (defvar wifi_rev false)
 (defvar eww "eww -c $HOME/.config/eww/bar/")
 
+(defvar username "whoami")
+
 (defpoll COL_WLAN :interval "5s" "bash ~/.config/eww/scripts/wifi --COL")
 (defpoll ESSID_WLAN :interval "5s" "bash ~/.config/eww/scripts/wifi --ESSID")
 (defpoll WLAN_ICON :interval "1m" "bash ~/.config/eww/scripts/wifi --ICON")
 
 (defpoll music_status :interval "500ms"  "bash ~/.config/eww/scripts/music --status")
-(defpoll music_title :interval "1s"  "bash ~/.config/eww/scripts/music --title")
+(deflisten music_title :initial ""  "bash ~/.config/eww/scripts/music --title")
 (defpoll music_artist :interval "1s"  "bash ~/.config/eww/scripts/music --artist")
 (defpoll music_cover :interval "1s"  "bash ~/.config/eww/scripts/music --cover")
 (defpoll music_progress :interval "500ms"  "bash ~/.config/eww/scripts/music --time")
-(defpoll volume :interval "500ms"  "bash ~/.config/eww/scripts/music --volume")
+(defpoll volume :interval "2s"  "bash ~/.config/eww/scripts/music --volume")
+
+;; should change all of these to deflisten
 
 
 (defpoll workspace_string :interval "100ms" "bash ~/.config/eww/scripts/workspaces")
@@ -49,7 +53,8 @@
 		 :class "right_modules"
      :spacing 20
   
-  
+  (system_resources)
+  (sep)
   (statuspanel)
   (power))
 )
@@ -76,6 +81,9 @@
 )
 
 
+(defwidget sep []
+  (box :class "module-2" :vexpand "false" :hexpand "false"
+    (label :class "separ" :text "|")))
 
 
 (defwidget clock []
@@ -103,6 +111,21 @@
           (label :text WLAN_ICON :class "icon")
         )
       )
+      
+    )
+)
+
+
+;;add tooltips or extra window for showing real values of system resources instead of just graphs
+(defwidget system_resources []
+  (box :vexpand "false" :hexpand "false" :space-evenly "false" :orientation "h"
+        (box :orientation "h" :spacing 15 :space-evenly "false"
+          (label :text "" :class "icon")
+          (circular-progress :value {EWW_RAM["used_mem_perc"]} :thickness 10 :start-at 75)
+          (label :text "" :class "icon")
+          (circular-progress :value {EWW_CPU["avg"]} :thickness 10 :start-at 75)
+            
+        )
       
     )
 )
@@ -184,5 +207,11 @@
 
 
 (defwidget control_pop []
-  (label :text "Hello")
+  (control_top_bar)
+)
+
+(defwidget control_top_bar []
+  (box :orientation "h"
+    (label :text username)
+  )
 )

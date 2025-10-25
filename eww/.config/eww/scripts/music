@@ -10,9 +10,7 @@ get_artist() {
 }
 
 get_title() {
-    title=`playerctl metadata --format '{{title}}'`
-
-    echo $title
+    playerctl --follow metadata --format '{{title}}'
 }
 
 get_volume() {
