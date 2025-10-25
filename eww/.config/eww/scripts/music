@@ -15,6 +15,14 @@ get_title() {
     echo $title
 }
 
+get_volume() {
+    volume=`playerctl volume`
+    volume=`echo "($volume * 100)" | bc -l`
+    volume=`printf "%.0f" $volume`
+
+    echo $volume
+}
+
 # TODO: add a way to set the time so you can scrub in the widget
 get_time() {
     current=`playerctl position`
@@ -82,4 +90,6 @@ elif [[ "$1" == "--toggle" ]]; then
 	playerctl play-pause
 elif [[ "$1" == "--time" ]]; then
 	get_time
+elif [[ "$1" == "--volume" ]]; then
+	get_volume
 fi

@@ -1,0 +1,24 @@
+#!/usr/bin/env bash
+
+ACTIVE_SYMBOL=""
+INACTIVE_SYMBOL=""
+
+
+workspaces=`hyprctl workspaces -j`
+workspaces=`echo $workspaces | jq 'sort_by(.id)'`
+
+activeId=`hyprctl activewindow | grep "workspace: " | cut -d' ' -f2 `
+
+workspaceString=""
+
+while read -r i; do
+    id=`echo $i | jq -r '.id'`
+    
+    if [[ "$id" == "$activeId" ]]; then 
+        workspaceString+="  $ACTIVE_SYMBOL"
+    else
+        workspaceString+="  $INACTIVE_SYMBOL"
+    fi
+done < <(echo $workspaces | jq -c '.[]')
+
+echo $workspaceString

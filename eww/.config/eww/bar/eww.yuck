@@ -15,6 +15,10 @@
 (defpoll music_artist :interval "1s"  "bash ~/.config/eww/scripts/music --artist")
 (defpoll music_cover :interval "1s"  "bash ~/.config/eww/scripts/music --cover")
 (defpoll music_progress :interval "500ms"  "bash ~/.config/eww/scripts/music --time")
+(defpoll volume :interval "500ms"  "bash ~/.config/eww/scripts/music --volume")
+
+
+(defpoll workspace_string :interval "100ms" "bash ~/.config/eww/scripts/workspaces")
 
 
 (defwidget bar [] 
@@ -43,10 +47,10 @@
 		 :space-evenly false  
          :halign "end"
 		 :class "right_modules"
-     :spacing 10
+     :spacing 20
   
   
-  (wifi)
+  (statuspanel)
   (power))
 )
 
@@ -55,7 +59,9 @@
     :space-evenly false  
         :halign "start"
     :class "left_modules"
-  (menubutton))
+    :spacing 20
+  (menubutton)
+  (workspaces))
 )
 
 (defwidget center []
@@ -63,6 +69,7 @@
     :space-evenly false  
         :halign "center"
     :class "center_modules"
+    :spacing 20
 
     (clock)
     (music))
@@ -87,16 +94,29 @@
   )
 )
 
-(defwidget wifi []
+(defwidget statuspanel []
     (box :vexpand "false" :hexpand "false" :space-evenly "false" :orientation "h"
-      (button :class "module-wif" :onclick "networkmanager_dmenu" :wrap "false" :limit-width 12  WLAN_ICON)
+      (button :class "status-panel" :onclick "bash ~/.config/eww/scripts/toggle_control_pop" :wrap "false" 
+        (box :orientation "h" :spacing 15 :space-evenly "false"
+          (label :text "󰕾" :class "icon")
+          (label :text "${volume}%")
+          (label :text WLAN_ICON :class "icon")
+        )
+      )
+      
+    )
+)
+
+(defwidget workspaces []
+    (box :vexpand "false" :hexpand "false" :space-evenly "false" :orientation "h" :class "workspace-box"
+      (label :text workspace_string)
       
     )
 )
 
 (defwidget power []
     (box :vexpand "false" :hexpand "false" :space-evenly "false" :orientation "h"
-      (button :class "module-power" :onclick "hyprctl dispatch exit" :wrap "false" :limit-width 12  (label :text ""))
+      (button :class "module-power" :onclick "hyprctl dispatch exit" :wrap "false" :limit-width 12  (label :text "" :class "icon"))
       
     )
 )
@@ -113,7 +133,7 @@
 
 (defwidget menubutton []
   (box :vexpand "false" :hexpand "false" :space-evenly "false" :orientation "h"
-      (button :class "module-power" :onclick "" :wrap "false" :limit-width 12  (label :text "󱄅"))
+      (button :class "module-power" :onclick "" :wrap "false" :limit-width 12  (label :text "󱄅" :class "icon"))
       
   )
 )
@@ -156,4 +176,13 @@
 )
   
 
-;; Can use hyprctl workspaces -j to get json data
+;; Control Panel Window
+
+(defwindow control_win :stacking "fg" :focusable "false" :screen 1 :monitor 0
+			    :geometry (geometry :x "0" :y "0px" :width 528 :height 104 :anchor "right top")
+			     				(control_pop))
+
+
+(defwidget control_pop []
+  (label :text "Hello")
+)
