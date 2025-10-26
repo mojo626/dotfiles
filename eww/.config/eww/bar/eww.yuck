@@ -12,14 +12,13 @@
 (defpoll ESSID_WLAN :interval "5s" "bash ~/.config/eww/scripts/wifi --ESSID")
 (defpoll WLAN_ICON :interval "1m" "bash ~/.config/eww/scripts/wifi --ICON")
 
-(defpoll music_status :interval "500ms"  "bash ~/.config/eww/scripts/music --status")
+(deflisten music_status :initial ""  "bash ~/.config/eww/scripts/music --status")
 (deflisten music_title :initial ""  "bash ~/.config/eww/scripts/music --title")
-(defpoll music_artist :interval "1s"  "bash ~/.config/eww/scripts/music --artist")
-(defpoll music_cover :interval "1s"  "bash ~/.config/eww/scripts/music --cover")
+(deflisten music_artist :initial ""  "bash ~/.config/eww/scripts/music --artist")
+(defpoll music_cover :interval "500ms"  "bash ~/.config/eww/scripts/music --cover")
 (defpoll music_progress :interval "500ms"  "bash ~/.config/eww/scripts/music --time")
 (defpoll volume :interval "2s"  "bash ~/.config/eww/scripts/music --volume")
 
-;; should change all of these to deflisten
 
 
 (defpoll workspace_string :interval "100ms" "bash ~/.config/eww/scripts/workspaces")
@@ -116,14 +115,14 @@
 )
 
 
-;;add tooltips or extra window for showing real values of system resources instead of just graphs
+;;add tooltips or extra window for showing real values of system resources instead of just graphs (something better than just tooltips?)
 (defwidget system_resources []
   (box :vexpand "false" :hexpand "false" :space-evenly "false" :orientation "h"
         (box :orientation "h" :spacing 15 :space-evenly "false"
           (label :text "" :class "icon")
-          (circular-progress :value {EWW_RAM["used_mem_perc"]} :thickness 10 :start-at 75)
+          (circular-progress :value {EWW_RAM["used_mem_perc"]} :thickness 10 :start-at 75 :tooltip "${round(EWW_RAM["used_mem_perc"], 2)}%")
           (label :text "" :class "icon")
-          (circular-progress :value {EWW_CPU["avg"]} :thickness 10 :start-at 75)
+          (circular-progress :value {EWW_CPU["avg"]} :thickness 10 :start-at 75 :tooltip "${round(EWW_CPU["avg"], 2)}%")
             
         )
       
@@ -176,7 +175,7 @@
     (label :text music_artist :halign "center" :wrap "true" :limit-width 25)
     (box :orientation "h" :spacing 15 :halign "center" :space-evenly "false" :vexpand "false" :hexpand "false"
         (button :class "music_btn_prev" :onclick "bash ~/.config/eww/scripts/music --prev" "󰒮")
-        (button :class "music_btn_play" :onclick "bash ~/.config/eww/scripts/music --toggle" music_status)
+        (button :class "music_btn_play" :onclick "bash ~/.config/eww/scripts/music --toggle" {music_status == "Playing" ? "" : ""})
         (button :class "music_btn_next" :onclick "bash ~/.config/eww/scripts/music --next" "󰒭"))
       (box :class "music_bar" :vexpand "false" :hexpand "false" 
         (scale :min 0 :active "false" :max 100 :value music_progress))

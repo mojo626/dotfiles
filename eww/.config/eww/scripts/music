@@ -4,9 +4,7 @@ STATUS="$(playerctl status)"
 CACHE_DIR="/tmp/eww-covers"
 
 get_artist() {
-    artist=`playerctl metadata --format '{{artist}}'`
-
-    echo $artist
+    playerctl --follow metadata --format '{{artist}}'
 }
 
 get_title() {
@@ -58,18 +56,20 @@ get_cover() {
     fi
 
     # Cleanup old cached files (anything not the current hash)
-    find "$CACHE_DIR" -type f ! -name "$HASH.jpg" -delete
+    #UNCOMMENT NEXT LINE FOR ONLY ONE COVER TO BE SAVED AT A TIME
+    #find "$CACHE_DIR" -type f ! -name "$HASH.jpg" -delete
 
     echo "$CACHED_FILE"
 }
 
 get_status() {
-    
-    if [[ $STATUS == "Playing" ]]; then
-		echo ""
-	else
-		echo ""
-	fi
+    playerctl --follow status
+
+    # if [[ $STATUS == "Playing" ]]; then
+	# 	echo ""
+	# else
+	# 	echo ""
+	# fi
 }
 
 if [[ "$1" == "--artist" ]]; then
