@@ -1,4 +1,4 @@
-(defpoll clock_time :interval "5m" "date +\%I")
+(defpoll clock_time :interval "20s" "date +\%I")
 (defpoll clock_minute :interval "5s" "date +\%M")
 (defpoll clock_second :interval "100ms" "date +\%S")
 (defpoll clock_date :interval "10h" "date '+%m/%d'")
@@ -20,9 +20,10 @@
 (deflisten volume :initial ""  "bash ~/.config/eww/scripts/music --volume")
 (defpoll uptime :interval "50s" "uptime | awk -F'( |,|:)+' '{d=h=m=0; if ($7==\"min\") m=$6; else {if ($7~/^day/) {d=$6;h=$8;m=$9} else {h=$6;m=$7}}} {print d+0,\"days,\",h+0,\"hours,\",m+0,\"minutes.\"}'")
 
-
+(deflisten notification :initial "" "tail -f /tmp/tiramisu.log")
 
 (defpoll workspace_string :interval "100ms" "bash ~/.config/eww/scripts/workspaces")
+
 
 
 (defwidget bar [] 
@@ -105,9 +106,10 @@
     (box :vexpand "false" :hexpand "false" :space-evenly "false" :orientation "h"
       (button :class "status-panel" :onclick "bash ~/.config/eww/scripts/toggle_control_pop" :wrap "false" 
         (box :orientation "h" :spacing 15 :space-evenly "false"
-          (label :text "󰕾" :class "icon")
+          (label :text {volume < 0.25 ? "" : volume < 0.75 ? "" : ""} :class "icon")
           (label :text "${round(volume*100,0)}%")
           (label :text WLAN_ICON :class "icon")
+          (label :text "" :class "icon")
         )
       )
       
@@ -207,8 +209,10 @@
 
 (defwidget control_pop []
   (box :orientation "v" :class "control_pop"
+    :transition "500ms ease"
     (control_top_bar)
     (control_sliders)
+      (label :text {notification})
   )
   
 )
@@ -228,7 +232,7 @@
 (defwidget control_sliders []
   (box :orientation "v"
     (box :orientation "h"
-      (label :text "hi")
+      (label :text {volume < 0.25 ? "" : volume < 0.75 ? "" : ""})
       (box :class "music_bar" :vexpand "false" :hexpand "false" 
         (scale :class "music_progress" :value {volume*100} :min 0 :max 101 :onchange "bash ~/.config/eww/scripts/music --set-volume {}"))
     )

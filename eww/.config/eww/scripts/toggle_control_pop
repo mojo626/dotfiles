@@ -4,6 +4,8 @@ STATUS="$(eww -c $HOME/.config/eww/bar/ active-windows | grep 'control_win')"
 
 if [[ $STATUS == "" ]]; then
 	eww -c $HOME/.config/eww/bar/ open control_win
+    swaync-client -t
 else
     eww -c $HOME/.config/eww/bar/ close control_win
+    swaync-client -t
 fi
