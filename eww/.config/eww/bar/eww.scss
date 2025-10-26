@@ -115,7 +115,7 @@ button {
 }
 
 
-scale trough {
+.music_progress trough {
   all: unset;
   background-color: #22242b;
   box-shadow: 0 2px 3px 2px #06060b;
@@ -125,7 +125,7 @@ scale trough {
   margin: 0px 10px 0px 0px;
 }
 
-.music_bar scale trough highlight {
+.music_bar .music_progress trough highlight {
 	all: unset;
     background-image: linear-gradient(to right, #afcee0 30%, #a1bdce 50%, #77a5bf 100% *50);
 	border-radius: 24px;
@@ -135,7 +135,7 @@ scale trough {
   padding: 0px 10px;
 }
 
-.music_bar scale trough {
+.music_bar .music_progress trough {
 	all: unset;
 	background-color: #232232;
     box-shadow: 0 6px 5px 2px #06060b;
@@ -169,4 +169,13 @@ scale trough {
 
 .cal.button {
 	background: none;
+}
+
+
+/*Control Panel popup*/
+
+.control_pop {
+    background-color: $background;
+	border-radius: 16px;
+  	padding: 10px;
 }

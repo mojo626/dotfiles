@@ -12,11 +12,13 @@ get_title() {
 }
 
 get_volume() {
-    volume=`playerctl volume`
-    volume=`echo "($volume * 100)" | bc -l`
-    volume=`printf "%.0f" $volume`
+    wpctl get-volume @DEFAULT_AUDIO_SINK@ | awk '{print $2}'
+    pactl subscribe | grep --line-buffered 'sink' | while read -r _; do wpctl get-volume @DEFAULT_AUDIO_SINK@ | awk '{print $2}'; done
+}
 
-    echo $volume
+set_volume() {
+    vol=`echo "$1 / 100.0" | bc -l`
+    wpctl set-volume @DEFAULT_AUDIO_SINK@ $vol
 }
 
 # TODO: add a way to set the time so you can scrub in the widget
@@ -90,4 +92,6 @@ elif [[ "$1" == "--time" ]]; then
 	get_time
 elif [[ "$1" == "--volume" ]]; then
 	get_volume
+elif [[ "$1" == "--set-volume" ]]; then
+	set_volume $2
 fi

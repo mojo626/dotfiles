@@ -6,7 +6,7 @@
 (defvar wifi_rev false)
 (defvar eww "eww -c $HOME/.config/eww/bar/")
 
-(defvar username "whoami")
+(defpoll username :interval "24h" "whoami")
 
 (defpoll COL_WLAN :interval "5s" "bash ~/.config/eww/scripts/wifi --COL")
 (defpoll ESSID_WLAN :interval "5s" "bash ~/.config/eww/scripts/wifi --ESSID")
@@ -17,7 +17,8 @@
 (deflisten music_artist :initial ""  "bash ~/.config/eww/scripts/music --artist")
 (defpoll music_cover :interval "500ms"  "bash ~/.config/eww/scripts/music --cover")
 (defpoll music_progress :interval "500ms"  "bash ~/.config/eww/scripts/music --time")
-(defpoll volume :interval "2s"  "bash ~/.config/eww/scripts/music --volume")
+(deflisten volume :initial ""  "bash ~/.config/eww/scripts/music --volume")
+(defpoll uptime :interval "50s" "uptime | awk -F'( |,|:)+' '{d=h=m=0; if ($7==\"min\") m=$6; else {if ($7~/^day/) {d=$6;h=$8;m=$9} else {h=$6;m=$7}}} {print d+0,\"days,\",h+0,\"hours,\",m+0,\"minutes.\"}'")
 
 
 
@@ -54,8 +55,7 @@
   
   (system_resources)
   (sep)
-  (statuspanel)
-  (power))
+  (statuspanel))
 )
 
 (defwidget left []
@@ -106,7 +106,7 @@
       (button :class "status-panel" :onclick "bash ~/.config/eww/scripts/toggle_control_pop" :wrap "false" 
         (box :orientation "h" :spacing 15 :space-evenly "false"
           (label :text "󰕾" :class "icon")
-          (label :text "${volume}%")
+          (label :text "${round(volume*100,0)}%")
           (label :text WLAN_ICON :class "icon")
         )
       )
@@ -178,7 +178,7 @@
         (button :class "music_btn_play" :onclick "bash ~/.config/eww/scripts/music --toggle" {music_status == "Playing" ? "" : ""})
         (button :class "music_btn_next" :onclick "bash ~/.config/eww/scripts/music --next" "󰒭"))
       (box :class "music_bar" :vexpand "false" :hexpand "false" 
-        (scale :min 0 :active "false" :max 100 :value music_progress))
+        (scale :class "music_progress" :min 0 :active "false" :max 100 :value music_progress))
   )
 )
 
@@ -206,11 +206,31 @@
 
 
 (defwidget control_pop []
-  (control_top_bar)
+  (box :orientation "v" :class "control_pop"
+    (control_top_bar)
+    (control_sliders)
+  )
+  
 )
 
 (defwidget control_top_bar []
-  (box :orientation "h"
-    (label :text username)
+  (box :orientation "h" :space-evenly "true"
+    (box :orientation "v" 
+      (label :text username)
+      (label :text uptime)
+    )
+    (button :onclick "hyprctl dispatch exit" :wrap "false" :limit-width 12  (label :text "󰍃" :class "icon"))
+    (button :onclick "shutdown -r now" :wrap "false" :limit-width 12  (label :text "" :class "icon"))
+    (button :onclick "shutdown now" :wrap "false" :limit-width 12  (label :text "" :class "icon"))
+  )
+)
+
+(defwidget control_sliders []
+  (box :orientation "v"
+    (box :orientation "h"
+      (label :text "hi")
+      (box :class "music_bar" :vexpand "false" :hexpand "false" 
+        (scale :class "music_progress" :value {volume*100} :min 0 :max 101 :onchange "bash ~/.config/eww/scripts/music --set-volume {}"))
+    )
   )
 )
