@@ -1,0 +1,16 @@
+#!/usr/bin/env bash
+
+STATUS="$(eww -c $HOME/.config/eww/launcher/ active-windows | grep 'launcher')"
+
+if [[ $STATUS == "" ]]; then
+	
+    echo '' >> /tmp/eww-launcher-query
+    echo '' >> /tmp/eww-launcher-results
+    hyprctl dispatch exec python3 $HOME/.config/eww/scripts/launcher.py
+
+    eww -c $HOME/.config/eww/launcher/ open launcher
+else
+    eww -c $HOME/.config/eww/launcher/ close launcher
+    rm /tmp/eww-launcher-query
+    rm /tmp/eww-launcher-results
+fi

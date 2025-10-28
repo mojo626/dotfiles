@@ -51,7 +51,7 @@
 #custom-shader = ~/.config/ghostty/shaders/cursor_smear.glsl
 #custom-shader-animation = always
 
-theme = dark:Rose Pine,light:Rose Pine Dawn
+#theme = dark:Rose Pine,light:Rose Pine Dawn
 
 # ==============================
 # ======= NEBULIX THEME ========

@@ -224,8 +224,9 @@
       (label :text uptime)
     )
     (button :onclick "hyprctl dispatch exit" :wrap "false" :limit-width 12  (label :text "󰍃" :class "icon"))
+    (button :onclick "systemctl suspend" :wrap "false" :limit-width 12  (label :text "󰤄" :class "icon"))
     (button :onclick "shutdown -r now" :wrap "false" :limit-width 12  (label :text "" :class "icon"))
-    (button :onclick "shutdown now" :wrap "false" :limit-width 12  (label :text "" :class "icon"))
+    (button :onclick "shutdown now" :wrap "false" :limit-width 12  (label :text "" :class "icon")) 
   )
 )
 
