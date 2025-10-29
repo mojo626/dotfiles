@@ -1,6 +1,7 @@
 import Quickshell // for PanelWindow
 import QtQuick
 import QtQuick.Layouts
+import qs.config
 import "startpart"
 import "middlepart"
 import "endpart"
@@ -26,6 +27,7 @@ Scope {
 
 			Rectangle {
 				anchors.fill: parent
+				color: ColorsConfig.palette.current.bar_background
 
 				GridLayout {
 					anchors.fill: parent

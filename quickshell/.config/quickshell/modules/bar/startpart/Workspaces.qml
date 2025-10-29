@@ -1,6 +1,7 @@
 import Quickshell
 import QtQuick
 import Quickshell.Hyprland
+import qs.config
 
 Row {
     id: wsRow
@@ -29,6 +30,8 @@ Row {
                 horizontalAlignment: Text.AlignHCenter
                 font.pixelSize: wsContainer.fontSize
                 text: Hyprland.workspaces.values[index].id == Hyprland.focusedWorkspace.id ? "" : ""
+
+                color: ColorsConfig.palette.current.text
             }
 
             MouseArea {
@@ -43,7 +46,7 @@ Row {
                     wsContainer.fontSize = 23;
                 }
                 onExited: event => {
-                    wsContainer.fontSize = 21;
+                    wsContainer.fontSize = 17;
                 }
             }
         }
