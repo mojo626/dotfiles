@@ -7,7 +7,7 @@ import "modules/controlcenter"
 Scope {
 	id: shellroot
 
-	property var showControlCenter: true
+	property var showControlCenter: false
 
 	Bar {}	
 	ControlCenter {}

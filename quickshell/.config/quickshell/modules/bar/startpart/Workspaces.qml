@@ -5,52 +5,71 @@ import qs.config
 
 Row {
     id: wsRow
+    
 
     anchors {
-        leftMargin: 10
+        leftMargin: 20
         rightMargin: 10
     }
-    spacing: 0
+    spacing: 10
 
     Repeater {
+         
         model: Hyprland.workspaces.values.length
 
         Item {
+            
             id: wsContainer
             required property int index
 
             height: wsRow.height
-            width: 25
-            property int fontSize: 17
+            width: wsIcon.width
+            property int activeWidth: 25
+            property int inactiveWidth: 10
+
+            property int wsId: Hyprland.workspaces.values[index].id
+            property bool isActive: wsId === Hyprland.focusedWorkspace.id
+            property bool occupied: Hyprland.workspaces.values.some(e => e.id == wsId) ?? false
             
 
-            Text {
-                id: wsText
-                anchors.fill: parent
-                verticalAlignment: Text.AlignVCenter
-                horizontalAlignment: Text.AlignHCenter
-                font.pixelSize: wsContainer.fontSize
-                text: Hyprland.workspaces.values[index].id == Hyprland.focusedWorkspace.id ? "" : ""
+            Rectangle {
+                id: wsIcon
+                width: isActive ? activeWidth : inactiveWidth
+                height: 10
 
-                color: ColorsConfig.palette.current.text
+                radius: 10
+                anchors.verticalCenter: parent.verticalCenter
 
-              
+                color: isActive ? ColorsConfig.palette.current.active_ws : occupied ? ColorsConfig.palette.current.occupied_ws : ColorsConfig.palette.current.empty_ws
+
+                 // smooth animation between widths
+                Behavior on width {
+                    NumberAnimation {
+                        duration: 200
+                        easing.type: Easing.OutCubic
+                    }
+                }
+
+                Behavior on color {
+                    PropertyAnimation {
+                        duration: 200
+                    }
+                }
             }
 
             MouseArea {
                 anchors.fill: parent
                 hoverEnabled: true
                 onClicked: event => {
-                    const ws = wsContainer.index + 1;
+                    const ws = wsContainer.wsId;
                     if (Hyprland.focusedWorkspace.id !== ws)
                         Hyprland.dispatch(`workspace ${ws}`);
                 }
                 onEntered: event => {
-                    wsContainer.fontSize = 23;
-                    //animateSize.start();
+                    wsIcon.width = isActive ? activeWidth + 4 : inactiveWidth + 4;
                 }
                 onExited: event => {
-                    wsContainer.fontSize = 17;
+                    wsIcon.width = isActive ? activeWidth : inactiveWidth;
                 }
             }
 
