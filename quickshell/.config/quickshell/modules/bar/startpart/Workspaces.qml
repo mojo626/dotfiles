@@ -25,6 +25,7 @@ Row {
             
 
             Text {
+                id: wsText
                 anchors.fill: parent
                 verticalAlignment: Text.AlignVCenter
                 horizontalAlignment: Text.AlignHCenter
@@ -32,6 +33,8 @@ Row {
                 text: Hyprland.workspaces.values[index].id == Hyprland.focusedWorkspace.id ? "" : ""
 
                 color: ColorsConfig.palette.current.text
+
+              
             }
 
             MouseArea {
@@ -44,11 +47,14 @@ Row {
                 }
                 onEntered: event => {
                     wsContainer.fontSize = 23;
+                    //animateSize.start();
                 }
                 onExited: event => {
                     wsContainer.fontSize = 17;
                 }
             }
+
+            
         }
     }
 }
