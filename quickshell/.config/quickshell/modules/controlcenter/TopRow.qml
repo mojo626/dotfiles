@@ -6,7 +6,7 @@ import Quickshell.Widgets
 
 Row {
     width: parent.width
-    height: 30
+    height: 60
 
     Image {
         source: "/home/" + UserInfo.user + "/.face"
@@ -15,6 +15,7 @@ Row {
 
 
     Column {
+        
         height: parent.height
         spacing: 5
         

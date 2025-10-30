@@ -7,7 +7,7 @@ Item {
 
     required property int buttonWidth
 
-    height: endRow.height
+    height: parent.height
     width: this.buttonWidth
 
     required property int fontSize
