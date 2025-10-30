@@ -25,6 +25,13 @@ Item {
         font.pixelSize: controlCenter.currentFontSize
 
         color: ColorsConfig.palette.current.text
+
+        Behavior on font.pixelSize {
+            NumberAnimation {
+                duration: 200
+                easing.type: Easing.OutCubic
+            }
+        }
     }
 
     MouseArea {

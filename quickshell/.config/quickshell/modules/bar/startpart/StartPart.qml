@@ -1,10 +1,13 @@
 import QtQuick
 import qs.config
+import Quickshell.Services.SystemTray
 
 
 Row {
     spacing: 10
     anchors.fill: parent
+
+    property var systemTray: SystemTray
 
     Rectangle {
         height: parent.height
@@ -14,6 +17,13 @@ Row {
         Workspaces {
             id: ws
             anchors.fill: parent
+        }
+
+        Repeater {
+        model: systemTray.items
+            delegate: Text {
+                text: "hi"
+            }
         }
 
     }

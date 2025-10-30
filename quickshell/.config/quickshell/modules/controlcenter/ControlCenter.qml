@@ -1,6 +1,8 @@
 import Quickshell
 import QtQuick
 import qs.config
+import QtQuick.Shapes
+import qs.components
 
 Variants {
     model: Quickshell.screens;
@@ -20,21 +22,40 @@ Variants {
             right: true
         }
 
-        margins.right: 10
-        margins.top: 10
+        color: "transparent"
 
-        implicitHeight: 500
-        implicitWidth: 500
+        height: 550
+        width: 500
 
         Rectangle {
-			anchors.fill: parent
+            id: panelRect
+
+            width: parent.width - 50
+			height: parent.height - 50
+            anchors.top: parent.top
+            anchors.right: parent.right
 			color: ColorsConfig.palette.current.bar_background
+
+            bottomLeftRadius: 25
+
 
             Column {
                 anchors.fill: parent
 
                 TopRow {}
             }
+        }
+
+
+        FilletedCorner {
+            radius: 50
+        }
+
+
+        FilletedCorner {
+            radius: 50
+            xOffset: parent.width - 50
+            yOffset: parent.height - 50
         }
 
     }
