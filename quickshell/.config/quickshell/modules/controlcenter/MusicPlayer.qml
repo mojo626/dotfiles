@@ -12,8 +12,11 @@ Rectangle {
 
     property var player: Mpris.players.values[0]
 
+    visible: player != null
+
     width: parent.width - 150
-    height: baseColumn.implicitHeight
+    height: baseColumn.implicitHeight + 20
+
 
     anchors.horizontalCenter: parent.horizontalCenter
 
@@ -35,10 +38,13 @@ Rectangle {
 
     Column {
         anchors.horizontalCenter: root.horizontalCenter
+        anchors.top: parent.top
+        anchors.margins: 10
         id: baseColumn
 
         Row {
             spacing: 30
+            
             
 
             Image {
@@ -72,12 +78,13 @@ Rectangle {
 
             value: playbackPositon
 
+            anchors.horizontalCenter: parent.horizontalCenter
+
             onMoved: {
                 var percent = control.value;
                 var seconds = percent * root.player.length;
 
                 root.player.position = seconds;
-                console.log(seconds);
             }
 
             background: Rectangle {
@@ -112,7 +119,10 @@ Rectangle {
                 running: true
                 // emit the positionChanged signal every frame.
                 onTriggered: {
-                    control.playbackPositon = root.player.position / root.player.length
+                    if (root.player != null) {
+                        control.playbackPositon = root.player.position / root.player.length
+                    }
+                    
                 }
             }
         }

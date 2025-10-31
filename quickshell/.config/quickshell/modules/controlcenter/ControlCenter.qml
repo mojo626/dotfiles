@@ -47,9 +47,6 @@ Variants {
                 NumberAnimation { 
                     duration: 300; 
                     easing.type: Easing.OutCubic 
-                    onFinished: {
-                        console.log("hello");
-                    }
                 }
             }
 

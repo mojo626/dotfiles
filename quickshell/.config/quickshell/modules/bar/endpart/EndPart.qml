@@ -25,6 +25,7 @@ Row {
             buttonWidth: parent.width
             onClicked:  {
                 shellroot.showControlCenter = !shellroot.showControlCenter
+                console.log(shellroot.showControlCenter);
             }
         }
     }

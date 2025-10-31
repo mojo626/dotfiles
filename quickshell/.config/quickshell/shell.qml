@@ -3,6 +3,7 @@ import QtQuick // for Text
 import Quickshell.Io
 import "modules/bar"
 import "modules/controlcenter"
+import "modules/launcher"
 
 Scope {
 	id: shellroot
@@ -11,4 +12,5 @@ Scope {
 
 	Bar {}	
 	ControlCenter {}
+	Launcher {}
 }
