@@ -4,6 +4,7 @@ import qs.config
 import Quickshell.Io
 import Quickshell.Hyprland
 import QtQuick.Controls
+import Quickshell.Wayland
 
 Variants {
     model: Quickshell.screens;
@@ -27,11 +28,19 @@ Variants {
             top: true
         }
 
+
         margins.top: 30
 
         focusable: true
         
-        property int initialHeight: 300
+        property int appHeight: 300
+        property int calcHeight: 100
+
+        property bool firstOpen: true
+
+
+        property int currentHeight: appHeight
+
 
         color: "transparent"
 
@@ -50,12 +59,16 @@ Variants {
             }
         }
 
+        WlrLayerShell.keyboardFocus: WlrKeyboardFocus.Exclusive
+
 
         property var matches: []
         property var matchData: []
         property var appList: DesktopEntries.applications.values.map(a => a.name)
         property var appDataList: DesktopEntries.applications.values
         property var searchQuery: ""
+
+        property string calcResult: ""
 
         //process to run to find apps with search query. Uses the fzf command-line tool for fuzzyfinding
         Process {
@@ -66,6 +79,12 @@ Variants {
             stdout: StdioCollector {
                 onStreamFinished: {
                     const result = this.text.trim().split("\n");
+
+                    if (result == "") {
+                        matches = [];
+                        matchData = [];
+                        return;
+                    }
                     
                     
                     const resultData = result.map(result => appDataList.find(app => app.name === result )).filter(app => !app.noDisplay);
@@ -73,7 +92,19 @@ Variants {
                     matchData = resultData;
                     matches = resultData.map(a => a.name);
 
-                    console.log(matchData.map(a => a.execString ));
+                    //console.log(matchData.map(a => Quickshell.iconPath(a.icon) ));
+                }
+            }
+        }
+
+        Process {
+            id: calcProc
+            running: false
+            command: ["qalc", "'" + searchQuery.substring(1) + "'"]
+
+            stdout: StdioCollector {
+                onStreamFinished: {
+                    calcResult = this.text;
                 }
             }
         }
@@ -89,17 +120,24 @@ Variants {
             Background {
                 id: background
                 parentRect: backgroundRect
-                menuHeight: shellroot.showLauncher ? window.initialHeight : 0
+                menuHeight: shellroot.showLauncher ? window.currentHeight : 0
 
                 //animating the height of the window lead to bad animations, so it has to be done in the Shape component
                 //this logic is used to hide the window when the bar is closed so you can click on things behind it
                 onExpanding: {
-                    window.implicitHeight = window.initialHeight;
-                    searchBar.text = "";
-                    fzfProc.running = true;
+                    if (firstOpen) {
+                        window.currentHeight = window.appHeight;
+                        window.implicitHeight = window.appHeight;
+                        searchBar.text = "";
+                        window.searchQuery = ""
+                        fzfProc.running = true;
+                        firstOpen = false;
+                    }
+                    
                 }
                 onRetracted: {
                     window.implicitHeight = 0;
+                    firstOpen = true;
                 }
             }
 
@@ -153,8 +191,26 @@ Variants {
                             wrapMode: TextInput.Wrap
 
                             onTextEdited: {
-                                window.searchQuery = searchBar.text;
-                                fzfProc.running = true;
+                                Qt.callLater(() => {
+                                    window.searchQuery = searchBar.text;
+
+                                    if (window.searchQuery.length > 0 && window.searchQuery[0] == "=") {
+                                        matches = [];
+                                        matchData = [];
+                                        window.currentHeight = window.calcHeight;
+                                        calcProc.running = true;
+                                        calcRect.visible = true;
+                                        appRect.visible = false;
+                                    } else {
+                                        fzfProc.running = true;
+                                        calcRect.visible = false;
+                                        appRect.visible = true;
+                                        window.currentHeight = window.appHeight;
+                                    }
+                                })
+                                
+
+                                
                             }
 
                             onAccepted: {
@@ -167,9 +223,28 @@ Variants {
 
                     }
 
+                    Rectangle {
+                        id: calcRect
+
+                        height: parent.height - 35
+                        width: parent.width
+
+                        color: "transparent"
+
+                        Text {
+                            text: window.calcResult
+                            color: ColorsConfig.palette.current.text
+
+                            anchors.horizontalCenter: parent.horizontalCenter
+                            anchors.verticalCenter: parent.verticalCenter
+                        }
+                    }
+
                     
                     ScrollView {
-                        height: 400
+                        id: appRect
+
+                        height: parent.height - 35 //(35) is the height of the seach bar + padding, should probably change this
                         
                         width: parent.width - 50
 
@@ -178,18 +253,34 @@ Variants {
                         anchors.leftMargin: 50
                         anchors.rightMargin: 50
 
+                        clip: true
+
                         ListView {
                             height: 100
                             width: 100
 
-                            model: window.matches
+                            model: window.matchData
                             delegate: Rectangle {
                                 height: 50
 
-                                Text {
-                                    text: modelData
-                                    color: ColorsConfig.palette.current.text
+                                Row {
+                                    spacing: 15
+
+                                    Image {
+                                        anchors.verticalCenter: parent.verticalCenter
+
+                                        width: 20
+                                        height: 20
+
+                                        source: Quickshell.iconPath(modelData.icon)
+                                    }
+
+                                    Text {
+                                        text: modelData.name
+                                        color: ColorsConfig.palette.current.text
+                                    }
                                 }
+                                
                             }
                             
                             
