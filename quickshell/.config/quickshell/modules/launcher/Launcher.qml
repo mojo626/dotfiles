@@ -26,6 +26,8 @@ Variants {
 
         margins.top: 30
 
+        focusable: true
+
 
 
         color: "transparent"
@@ -53,8 +55,14 @@ Variants {
             }
 
             TextInput {
-                anchors.fill: parent
+                height: 50
+                width: 500
+
+                renderType: Text.NativeRendering
+
+                text: "testing"
             }
+
 
         }
 
