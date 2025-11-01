@@ -48,18 +48,8 @@ Variants {
         implicitHeight: 0  
         implicitWidth: 700 
 
-        //this grabs focus when the launcher is opened so you can immediately type to search
-        HyprlandFocusGrab {
-            id: grab
-            active: shellroot.showLauncher
-            windows: [ window ] 
-
-            onCleared: {
-                shellroot.showLauncher = false; //close launcher if something else on screen is clicked
-            }
-        }
-
-        WlrLayerShell.keyboardFocus: WlrKeyboardFocus.Exclusive
+        //this grabs focus when the launcher is opened so you can immediately type to search (and makes sure that when it is closed you can use other windows :D )
+        WlrLayershell.keyboardFocus: shellroot.showLauncher ? WlrKeyboardFocus.Exclusive : WlrKeyboardFocus.None
 
 
         property var matches: []
@@ -132,11 +122,14 @@ Variants {
                         window.searchQuery = ""
                         fzfProc.running = true;
                         firstOpen = false;
+                        calcRect.visible = false;
+                        appRect.visible = true;
                     }
                     
                 }
                 onRetracted: {
                     window.implicitHeight = 0;
+                    window.currentHeight = window.appHeight;
                     firstOpen = true;
                 }
             }
