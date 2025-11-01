@@ -169,6 +169,13 @@ Variants {
 
                         color: ColorsConfig.palette.current.primary_container
 
+                        Timer {
+                            id: heightUpdateTimer
+                            interval: 100
+                            repeat: false
+                            onTriggered: window.currentHeight = Math.min(window.appHeight, appRect.implicitHeight + 25)
+                        }
+
                         TextInput {
                             id: searchBar
 
@@ -190,23 +197,21 @@ Variants {
                             wrapMode: TextInput.Wrap
 
                             onTextEdited: {
-                                Qt.callLater(() => {
-                                    window.searchQuery = searchBar.text;
+                                window.searchQuery = searchBar.text;
 
-                                    if (window.searchQuery.length > 0 && window.searchQuery[0] == "=") {
-                                        matches = [];
-                                        matchData = [];
-                                        window.currentHeight = window.calcHeight;
-                                        calcProc.running = true;
-                                        calcRect.visible = true;
-                                        appRect.visible = false;
-                                    } else {
-                                        fzfProc.running = true;
-                                        calcRect.visible = false;
-                                        appRect.visible = true;
-                                        window.currentHeight = window.appHeight;
-                                    }
-                                })
+                                if (window.searchQuery.length > 0 && window.searchQuery[0] == "=") {
+                                    matches = [];
+                                    matchData = [];
+                                    window.currentHeight = window.calcHeight;
+                                    calcProc.running = true;
+                                    calcRect.visible = true;
+                                    appRect.visible = false;
+                                } else {
+                                    fzfProc.running = true;
+                                    calcRect.visible = false;
+                                    appRect.visible = true;
+                                    heightUpdateTimer.restart();
+                                }
                                 
 
                                 
@@ -280,7 +285,7 @@ Variants {
                                     }
 
                                     Text {
-                                        text: modelData.name + ", " + modelData.icon
+                                        text: modelData.name
                                         color: ColorsConfig.palette.current.text
                                     }
                                 }
