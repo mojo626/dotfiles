@@ -99,6 +99,12 @@ Variants {
             }
         }
 
+        //process to run for any terminal apps (like btop)
+        Process {
+            id: runTerminalApp
+            running: false
+        }
+
         Rectangle {
             id: backgroundRect
 
@@ -207,7 +213,12 @@ Variants {
                             }
 
                             onAccepted: {
-                                matchData[0].execute();
+                                if (matchData[0].runInTerminal) {
+                                    runTerminalApp.exec(["ghostty", "-e", matchData[0].execString]);
+                                } else {
+                                    matchData[0].execute();
+                                }
+                                
                                 shellroot.showLauncher = false;
                             }
 
@@ -269,7 +280,7 @@ Variants {
                                     }
 
                                     Text {
-                                        text: modelData.name
+                                        text: modelData.name + ", " + modelData.icon
                                         color: ColorsConfig.palette.current.text
                                     }
                                 }
