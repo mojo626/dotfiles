@@ -1,6 +1,7 @@
 import Quickshell
 import QtQuick
 import qs.config
+import Quickshell.Io
 
 Variants {
     model: Quickshell.screens;
@@ -29,12 +30,31 @@ Variants {
 
         focusable: true
 
-        property int initialHeight: 35
+        property int initialHeight: 500
 
         color: "transparent"
 
         implicitHeight: 0  
         implicitWidth: 700 
+
+
+        property var matches: []
+        property var appList: DesktopEntries.applications.values.map(a => a.name)
+        property var searchQuery: ""
+
+        Process {
+            id: fzfProc
+            running: true
+            command: ["sh", "-c", "echo '" + appList.join("\n") + "' | fzf --scheme=default -f '" + searchQuery + "'"]
+
+            stdout: StdioCollector {
+                onStreamFinished: {
+                    const result = this.text.trim().split("\n");
+                    matches = result
+                    console.log(matches);
+                }
+            }
+        }
 
         Rectangle {
             id: backgroundRect
@@ -43,8 +63,7 @@ Variants {
 
             anchors.fill: parent
 
-            height: searchRect.implicitHeight
-
+           
             Background {
                 id: background
                 parentRect: backgroundRect
@@ -92,10 +111,25 @@ Variants {
                     color: ColorsConfig.palette.current.text
 
                     wrapMode: TextInput.Wrap
+
+                    onTextEdited: {
+                        window.searchQuery = searchBar.text;
+                        fzfProc.running = true;
+                    }
                 }
+
             }
 
-            
+            ListView {
+                height: 1000
+                width: 100
+
+                model: window.matches
+                delegate: Text {
+                    text: modelData
+                    color: ColorsConfig.palette.current.text
+                }
+            }        
 
 
         }
