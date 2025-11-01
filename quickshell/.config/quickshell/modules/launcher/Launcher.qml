@@ -25,7 +25,6 @@ Variants {
 
         anchors {
             top: true
-
         }
 
         margins.top: 30
@@ -35,6 +34,7 @@ Variants {
         property int initialHeight: 300
 
         color: "transparent"
+
 
         implicitHeight: 0  
         implicitWidth: 700 
@@ -57,6 +57,7 @@ Variants {
         property var appDataList: DesktopEntries.applications.values
         property var searchQuery: ""
 
+        //process to run to find apps with search query. Uses the fzf command-line tool for fuzzyfinding
         Process {
             id: fzfProc
             running: true
@@ -67,7 +68,6 @@ Variants {
                     const result = this.text.trim().split("\n");
                     
                     
-
                     const resultData = result.map(result => appDataList.find(app => app.name === result )).filter(app => !app.noDisplay);
 
                     matchData = resultData;
@@ -85,11 +85,14 @@ Variants {
 
             anchors.fill: parent
 
-           
+           //the background with rounded corners and fillets
             Background {
                 id: background
                 parentRect: backgroundRect
                 menuHeight: shellroot.showLauncher ? window.initialHeight : 0
+
+                //animating the height of the window lead to bad animations, so it has to be done in the Shape component
+                //this logic is used to hide the window when the bar is closed so you can click on things behind it
                 onExpanding: {
                     window.implicitHeight = window.initialHeight;
                     searchBar.text = "";
@@ -100,6 +103,7 @@ Variants {
                 }
             }
 
+            //this rect is used to clip the content so it is smoothly animated
             Rectangle {
                 width: parent.width
                 height: background.menuHeight
@@ -194,17 +198,8 @@ Variants {
                 }
             }
 
-            
-
-            
-            
-
-                  
-
 
         }
-
-        
 
     }
 
