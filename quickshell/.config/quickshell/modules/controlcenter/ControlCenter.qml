@@ -43,6 +43,10 @@ Variants {
             x: shellroot.showControlCenter ? 50 : panelRect.width + 50
             y: 0
 
+            Component.onCompleted: {
+                shellroot.showControlCenter = false //for some reason quickshell crashes when this is set to false by default in shell.qml TODO: fix
+            }
+
             Behavior on x {
                 NumberAnimation { 
                     duration: 300; 

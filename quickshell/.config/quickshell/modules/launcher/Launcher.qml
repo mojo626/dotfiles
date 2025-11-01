@@ -1,5 +1,6 @@
 import Quickshell
 import QtQuick
+import qs.config
 
 Variants {
     model: Quickshell.screens;
@@ -28,11 +29,11 @@ Variants {
 
         focusable: true
 
-
+        property int initialHeight: 35
 
         color: "transparent"
 
-        implicitHeight: 100  
+        implicitHeight: 0  
         implicitWidth: 700 
 
         Rectangle {
@@ -42,26 +43,59 @@ Variants {
 
             anchors.fill: parent
 
+            height: searchRect.implicitHeight
+
             Background {
                 id: background
                 parentRect: backgroundRect
-                menuHeight: shellroot.showLauncher ? 100 : 0
+                menuHeight: shellroot.showLauncher ? window.initialHeight : 0
                 onExpanding: {
-                    window.implicitHeight = 100
+                    window.implicitHeight = window.initialHeight;
+                    searchBar.text = "";
                 }
                 onRetracted: {
                     window.implicitHeight = 0;
                 }
             }
 
-            TextInput {
-                height: 50
-                width: 500
+            Rectangle {
+                id: searchRect
 
-                renderType: Text.NativeRendering
+                width: parent.width - 50
 
-                text: "testing"
+                anchors.left: parent.left
+                anchors.right: parent.right
+                anchors.leftMargin: 50
+                anchors.rightMargin: 50
+
+                height: 25
+                radius: 50
+
+                color: ColorsConfig.palette.current.primary_container
+
+                TextInput {
+                    id: searchBar
+
+                    width: parent.width
+
+                    anchors.left: parent.left
+                    anchors.right: parent.right
+                    anchors.leftMargin: 20
+                    anchors.rightMargin: 20
+
+                    height: parent.height
+
+                    verticalAlignment: TextInput.AlignVCenter
+
+                    renderType: Text.NativeRendering
+
+                    color: ColorsConfig.palette.current.text
+
+                    wrapMode: TextInput.Wrap
+                }
             }
+
+            
 
 
         }

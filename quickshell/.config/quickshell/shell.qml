@@ -9,8 +9,8 @@ import "modules/launcher"
 Scope {
 	id: shellroot
 
-	property var showControlCenter: false
-	property var showLauncher: true 
+	property var showControlCenter: true
+	property var showLauncher: false
 
 	Bar {}	
 	ControlCenter {}
