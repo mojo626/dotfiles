@@ -26,8 +26,8 @@ Variants {
 
         color: "transparent"
 
-        height: 550
-        width: 500
+        implicitHeight: 550
+        implicitWidth: 500
 
         Rectangle {
 

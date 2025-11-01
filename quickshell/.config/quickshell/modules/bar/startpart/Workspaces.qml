@@ -28,7 +28,7 @@ Row {
             property int inactiveWidth: 10
 
             property int wsId: index + 1
-            property bool isActive: wsId === Hyprland.focusedWorkspace.id
+            property bool isActive: wsId === Hyprland.focusedWorkspace?.id
             property bool occupied: Hyprland.workspaces.values.some(e => e.id == wsId) ?? false
             
 

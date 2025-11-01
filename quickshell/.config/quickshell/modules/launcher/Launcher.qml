@@ -10,6 +10,7 @@ Variants {
 
 
     PanelWindow {
+        id: window
 
         required property var modelData
         screen: modelData
@@ -29,20 +30,30 @@ Variants {
 
         color: "transparent"
 
-        height: 200
-        width: 700
+        implicitHeight: 100  
+        implicitWidth: 700 
 
         Rectangle {
             id: backgroundRect
 
-            //color: "#ffffff"
             color: "transparent"
 
             anchors.fill: parent
 
             Background {
+                id: background
                 parentRect: backgroundRect
+                menuHeight: shellroot.showLauncher ? 100 : 0
+                onExpanding: {
+                    window.implicitHeight = 100
+                }
+                onRetracted: {
+                    window.implicitHeight = 0;
+                }
+            }
 
+            TextInput {
+                anchors.fill: parent
             }
 
         }
