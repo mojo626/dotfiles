@@ -2,6 +2,8 @@ import Quickshell
 import QtQuick
 import qs.config
 import Quickshell.Io
+import Quickshell.Hyprland
+import QtQuick.Controls
 
 Variants {
     model: Quickshell.screens;
@@ -29,17 +31,30 @@ Variants {
         margins.top: 30
 
         focusable: true
-
-        property int initialHeight: 500
+        
+        property int initialHeight: 300
 
         color: "transparent"
 
         implicitHeight: 0  
         implicitWidth: 700 
 
+        //this grabs focus when the launcher is opened so you can immediately type to search
+        HyprlandFocusGrab {
+            id: grab
+            active: shellroot.showLauncher
+            windows: [ window ] 
+
+            onCleared: {
+                shellroot.showLauncher = false; //close launcher if something else on screen is clicked
+            }
+        }
+
 
         property var matches: []
+        property var matchData: []
         property var appList: DesktopEntries.applications.values.map(a => a.name)
+        property var appDataList: DesktopEntries.applications.values
         property var searchQuery: ""
 
         Process {
@@ -50,8 +65,15 @@ Variants {
             stdout: StdioCollector {
                 onStreamFinished: {
                     const result = this.text.trim().split("\n");
-                    matches = result
-                    console.log(matches);
+                    
+                    
+
+                    const resultData = result.map(result => appDataList.find(app => app.name === result )).filter(app => !app.noDisplay);
+
+                    matchData = resultData;
+                    matches = resultData.map(a => a.name);
+
+                    console.log(matchData.map(a => a.execString ));
                 }
             }
         }
@@ -71,6 +93,7 @@ Variants {
                 onExpanding: {
                     window.implicitHeight = window.initialHeight;
                     searchBar.text = "";
+                    fzfProc.running = true;
                 }
                 onRetracted: {
                     window.implicitHeight = 0;
@@ -78,58 +101,105 @@ Variants {
             }
 
             Rectangle {
-                id: searchRect
+                width: parent.width
+                height: background.menuHeight
+                
+                color: "transparent"
 
-                width: parent.width - 50
+                clip: true
 
-                anchors.left: parent.left
-                anchors.right: parent.right
-                anchors.leftMargin: 50
-                anchors.rightMargin: 50
+                Column {
+                    anchors.fill: parent
 
-                height: 25
-                radius: 50
+                    spacing: 10
 
-                color: ColorsConfig.palette.current.primary_container
+                    Rectangle {
+                        id: searchRect
 
-                TextInput {
-                    id: searchBar
+                        width: parent.width - 50
 
-                    width: parent.width
+                        anchors.left: parent.left
+                        anchors.right: parent.right
+                        anchors.leftMargin: 50
+                        anchors.rightMargin: 50
 
-                    anchors.left: parent.left
-                    anchors.right: parent.right
-                    anchors.leftMargin: 20
-                    anchors.rightMargin: 20
+                        height: 25
+                        radius: 50
 
-                    height: parent.height
+                        color: ColorsConfig.palette.current.primary_container
 
-                    verticalAlignment: TextInput.AlignVCenter
+                        TextInput {
+                            id: searchBar
 
-                    renderType: Text.NativeRendering
+                            width: parent.width
 
-                    color: ColorsConfig.palette.current.text
+                            anchors.left: parent.left
+                            anchors.right: parent.right
+                            anchors.leftMargin: 20
+                            anchors.rightMargin: 20
 
-                    wrapMode: TextInput.Wrap
+                            height: parent.height
 
-                    onTextEdited: {
-                        window.searchQuery = searchBar.text;
-                        fzfProc.running = true;
+                            verticalAlignment: TextInput.AlignVCenter
+
+                            renderType: Text.NativeRendering
+
+                            color: ColorsConfig.palette.current.text
+
+                            wrapMode: TextInput.Wrap
+
+                            onTextEdited: {
+                                window.searchQuery = searchBar.text;
+                                fzfProc.running = true;
+                            }
+
+                            onAccepted: {
+                                matchData[0].execute();
+                                shellroot.showLauncher = false;
+                            }
+
+                            focus: true
+                        }
+
                     }
-                }
 
+                    
+                    ScrollView {
+                        height: 400
+                        
+                        width: parent.width - 50
+
+                        anchors.left: parent.left
+                        anchors.right: parent.right
+                        anchors.leftMargin: 50
+                        anchors.rightMargin: 50
+
+                        ListView {
+                            height: 100
+                            width: 100
+
+                            model: window.matches
+                            delegate: Rectangle {
+                                height: 50
+
+                                Text {
+                                    text: modelData
+                                    color: ColorsConfig.palette.current.text
+                                }
+                            }
+                            
+                            
+                        }  
+                    }   
+                }
             }
 
-            ListView {
-                height: 1000
-                width: 100
+            
 
-                model: window.matches
-                delegate: Text {
-                    text: modelData
-                    color: ColorsConfig.palette.current.text
-                }
-            }        
+            
+            
+
+                  
 
 
         }
