@@ -10,14 +10,13 @@ Variants {
     id: root
 
     
-
-
     PanelWindow {
+        id: window
 
         required property var modelData
         screen: modelData
 
-        visible: !(panelRect.x == panelRect.width + 50)
+        visible: true
 
         anchors {
             top: true
@@ -26,56 +25,53 @@ Variants {
 
         color: "transparent"
 
-        implicitHeight: 550
-        implicitWidth: 500
+        implicitHeight: 500
+        implicitWidth: 0
+
 
         Rectangle {
 
             id: panelRect
 
-            width: parent.width - 50 //allow for space in the window to have filleted corners
-			height: parent.height - 50 //allow for space in the window to have filleted corners
+            anchors.fill: parent
             
-			color: ColorsConfig.palette.current.bar_background
+			color: "transparent"
 
-            bottomLeftRadius: 25
+            Background {
+                id: background
 
-            x: shellroot.showControlCenter ? 50 : panelRect.width + 50
-            y: 0
+                menuWidth: shellroot.showControlCenter ? 500 : 0
+                parentRect: panelRect
 
-            Component.onCompleted: {
-                shellroot.showControlCenter = false //for some reason quickshell crashes when this is set to false by default in shell.qml TODO: fix
-            }
+                onExpanding: {
+                    window.implicitWidth = 500;
+                }
 
-            Behavior on x {
-                NumberAnimation { 
-                    duration: 300; 
-                    easing.type: Easing.OutCubic 
+                onRetracted: {
+                    window.implicitWidth = 0;
                 }
             }
 
 
+            Rectangle {
+                width: window.width - 25
+                height: parent.height
 
-            Column {
-                anchors.fill: parent
+                x: window.width - background.menuWidth + 50
 
-                TopRow {}
+                color: "transparent"
 
-                MusicPlayer {}
-            }
-        }
+                clip: true
 
+                Column {
+                    anchors.fill: parent
 
-        FilletedCorner {
-            radius: 50
-            xOffset: panelRect.x - 50
-        }
+                    TopRow {}
 
-
-        FilletedCorner {
-            radius: 50
-            xOffset: parent.width - 50 + (panelRect.x - 50)
-            yOffset: parent.height - 50
+                    MusicPlayer {}
+                }
+            }   
+            
         }
 
     }
