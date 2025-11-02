@@ -270,7 +270,10 @@ Variants {
 
                             model: window.matchData
                             delegate: Rectangle {
+                                id: appItemRect
                                 height: 50
+
+                                color: ColorsConfig.palette.current.bar_background
 
                                 Row {
                                     spacing: 15
@@ -287,6 +290,20 @@ Variants {
                                     Text {
                                         text: modelData.name
                                         color: ColorsConfig.palette.current.text
+                                    }
+                                }
+
+                                MouseArea {
+                                    anchors.fill: parent
+                                    hoverEnabled: true
+                                    onClicked: {
+                                        console.log("app clicked");
+                                    }
+                                    onEntered: event => {
+                                        appItemRect.color = ColorsConfig.palette.current.primary_container;
+                                    }
+                                    onExited: event => {
+                                        appItemRect.color = ColorsConfig.palette.current.bar_background;
                                     }
                                 }
                                 
