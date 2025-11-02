@@ -14,7 +14,7 @@ Rectangle {
 
     visible: player != null
 
-    width: parent.width - 150
+    width: parent.width 
     height: baseColumn.implicitHeight + 20
 
 

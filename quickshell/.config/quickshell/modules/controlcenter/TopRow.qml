@@ -8,6 +8,8 @@ Row {
     width: parent.width
     height: 60
 
+    spacing: 10
+
     Image {
         source: "/home/" + UserInfo.user + "/.face"
         sourceSize.width: 50

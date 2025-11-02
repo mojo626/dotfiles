@@ -26,7 +26,7 @@ Variants {
         color: "transparent"
 
         implicitHeight: 500
-        implicitWidth: 0
+        implicitWidth: 500
 
 
         Rectangle {
@@ -54,7 +54,7 @@ Variants {
 
 
             Rectangle {
-                width: window.width - 25
+                width: window.width - 75
                 height: parent.height
 
                 x: window.width - background.menuWidth + 50
@@ -65,8 +65,11 @@ Variants {
 
                 Column {
                     anchors.fill: parent
+                    spacing: 10
 
                     TopRow {}
+                    
+                    WifiBT {}
 
                     MusicPlayer {}
                 }
