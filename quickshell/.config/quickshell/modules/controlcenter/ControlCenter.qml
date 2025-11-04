@@ -16,6 +16,16 @@ Variants {
         required property var modelData
         screen: modelData
 
+        property int centerHeight: topRot.height + wifiBt.fixedHeight + player.height + 70
+
+        // Behavior on centerHeight {
+        //     NumberAnimation {
+        //         duration: 200
+        //         easing.type: Easing.OutCubic
+        //     }
+        // }
+
+
         visible: true
 
         anchors {
@@ -25,7 +35,7 @@ Variants {
 
         color: "transparent"
 
-        implicitHeight: 500
+        height: centerHeight
         implicitWidth: 500
 
 
@@ -33,7 +43,8 @@ Variants {
 
             id: panelRect
 
-            anchors.fill: parent
+            width: parent.width
+            height: parent.height
             
 			color: "transparent"
 
@@ -54,6 +65,7 @@ Variants {
 
 
             Rectangle {
+                id: contentRect
                 width: window.width - 75
                 height: parent.height
 
@@ -64,14 +76,21 @@ Variants {
                 clip: true
 
                 Column {
+                    id: mainColumn
                     anchors.fill: parent
                     spacing: 10
 
-                    TopRow {}
+                    TopRow {
+                        id: topRot
+                    }
                     
-                    WifiBT {}
+                    WifiBT {
+                        id: wifiBt
+                    }
 
-                    MusicPlayer {}
+                    MusicPlayer {
+                        id: player
+                    }
                 }
             }   
             
