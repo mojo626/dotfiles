@@ -63,7 +63,7 @@ Row {
         Process {
             id: logoutProc
             running: false
-            command: ["hyprctl", "exec", "exit"]
+            command: ["hyprctl", "dispatch", "exit"]
         }
 
         Process {
@@ -100,7 +100,7 @@ Row {
             icon: ""
             
             onClicked: {
-                shutdownProc.running = true;
+                shutdownProc.running = true; 
             }
         }
     }
