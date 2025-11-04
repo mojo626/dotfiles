@@ -3,6 +3,8 @@ import Quickshell
 import qs.config
 import qs.services
 import Quickshell.Widgets
+import QtQuick.Layouts
+import Quickshell.Io
 
 Row {
     width: parent.width
@@ -36,6 +38,70 @@ Row {
             height: parent.height/2
 
             text: UserInfo.uptime
+        }
+    }
+
+
+    RowLayout {
+        anchors.verticalCenter: parent.verticalCenter
+
+        height: 50
+        width: 100
+
+        Process {
+            id: shutdownProc
+            running: false
+            command: ["shutdown", "now"]
+        }
+
+        Process {
+            id: restartProc
+            running: false
+            command: ["reboot", "now"]
+        }
+
+        Process {
+            id: logoutProc
+            running: false
+            command: ["hyprctl", "exec", "exit"]
+        }
+
+        Process {
+            id: sleepProc
+            running: false
+            command: ["systemctl", "suspend"]
+        }
+
+        PowerButton {
+            icon: "󰤄"
+            
+            onClicked: {
+                sleepProc.running = true;
+            }
+        }
+
+        PowerButton {
+            icon: "󰗽"
+            
+            onClicked: {
+                logoutProc.running = true;
+            }
+        }
+
+        PowerButton {
+            icon: ""
+            
+            onClicked: {
+                restartProc.running = true;
+            }
+        }
+
+        PowerButton {
+            icon: ""
+            
+            onClicked: {
+                shutdownProc.running = true;
+            }
         }
     }
     
