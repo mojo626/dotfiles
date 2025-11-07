@@ -16,7 +16,7 @@ Variants {
         required property var modelData
         screen: modelData
 
-        property int centerHeight: topRot.height + wifiBt.fixedHeight + player.height + 70
+        property int centerHeight: topRot.height + wifiBt.fixedHeight + player.height + sliders.height + 70
 
         // Behavior on centerHeight {
         //     NumberAnimation {
@@ -90,6 +90,10 @@ Variants {
 
                     MusicPlayer {
                         id: player
+                    }
+
+                    Sliders {
+                        id: sliders
                     }
                 }
             }   

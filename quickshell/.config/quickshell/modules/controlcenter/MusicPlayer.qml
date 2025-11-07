@@ -15,7 +15,7 @@ Rectangle {
     visible: player != null
 
     width: parent.width 
-    height: baseColumn.implicitHeight + 20
+    height: player != null ? baseColumn.implicitHeight + 20 : 0
 
 
     anchors.horizontalCenter: parent.horizontalCenter
