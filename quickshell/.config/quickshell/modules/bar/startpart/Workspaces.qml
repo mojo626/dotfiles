@@ -6,11 +6,6 @@ import qs.config
 Row {
     id: wsRow
     
-
-    anchors {
-        leftMargin: 20
-        rightMargin: 10
-    }
     spacing: 10
 
     Repeater {

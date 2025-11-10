@@ -1,31 +1,68 @@
 import QtQuick
 import qs.config
 import Quickshell.Services.SystemTray
+import QtQuick.Layouts
 
 
-Row {
-    spacing: 10
+
+RowLayout {
     anchors.fill: parent
 
-    property var systemTray: SystemTray
+    spacing: 20
 
-    Rectangle {
-        height: parent.height
-        width: ws.implicitWidth + 30
-        color: ColorsConfig.palette.current.bar_background
+    Workspaces {
+        //Layout.fillWidth: true
+        Layout.fillHeight: true
 
-        Workspaces {
-            id: ws
-            anchors.fill: parent
-        }
+        Layout.leftMargin: 20
 
-        Repeater {
-        model: systemTray.items
-            delegate: Text {
-                text: "hi"
-            }
-        }
-
+        id: ws
     }
 
+
+
+    Rectangle {
+        Layout.fillWidth: true
+        Layout.fillHeight: true
+
+        color: "transparent"
+
+
+        RowLayout {
+            height: parent.height
+
+            Repeater {
+
+                model: SystemTray.items
+                delegate: Rectangle {
+
+                    id: trayRect
+
+                    Layout.fillHeight: true
+                    Layout.preferredWidth: trayRect.height
+
+                    radius: 100
+
+                    Layout.margins: 5
+
+                    Image {
+                        source: modelData.icon
+
+                        anchors.fill: parent
+                        
+                    }
+
+                }
+                
+                    
+            }
+
+        }
+
+        
+    }
+
+    
+
 }
+
