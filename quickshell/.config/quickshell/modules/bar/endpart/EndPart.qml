@@ -42,6 +42,24 @@ Row {
         }
     }
 
+    IconButton {
+        text: "    " + Math.round(SystemUsage.usedRam / SystemUsage.totalRam * 100) + "%"
+        fontSize: 17
+        buttonWidth: 70
+        onClicked: {
+            console.log("sound clicked");
+        }
+    }
+
+    IconButton {
+        text: "    " + Math.round(SystemUsage.cpuPerc) + "%"
+        fontSize: 17
+        buttonWidth: 70
+        onClicked: {
+            console.log("sound clicked");
+        }
+    }
+
     
 
     

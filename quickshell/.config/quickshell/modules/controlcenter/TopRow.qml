@@ -6,44 +6,49 @@ import Quickshell.Widgets
 import QtQuick.Layouts
 import Quickshell.Io
 
-Row {
+RowLayout {
     width: parent.width
     height: 60
 
     spacing: 10
 
     Image {
+        id: pfp
+
         source: "/home/" + UserInfo.user + "/.face"
-        sourceSize.width: 50
+
+        Layout.fillHeight: true
+        Layout.alignment: Qt.AlignVCenter
+        Layout.preferredWidth: pfp.height
     }
 
 
-    Column {
+    ColumnLayout {
         
-        height: parent.height
-        spacing: 5
+        Layout.fillHeight: true
+        spacing: 0
         
 
         Text {
-            horizontalAlignment: Text.AlignHCenter
+            Layout.alignment: Qt.AlignBottom
             color: ColorsConfig.palette.current.text
-            height: parent.height/2
 
             text: UserInfo.user
+
         }
 
         Text {
-            horizontalAlignment: Text.AlignHCenter
+            Layout.alignment: Qt.AlignTop
             color: ColorsConfig.palette.current.text
-            height: parent.height/2
 
             text: UserInfo.uptime
+
         }
     }
 
 
     RowLayout {
-        anchors.verticalCenter: parent.verticalCenter
+        Layout.alignment: Qt.AlignRight
 
         height: 50
         width: 100

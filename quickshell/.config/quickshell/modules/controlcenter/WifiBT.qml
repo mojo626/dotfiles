@@ -91,16 +91,20 @@ ColumnLayout {
                 }
                 
                 ColumnLayout {
-                    anchors.verticalCenter: parent.verticalCenter
+                    Layout.fillWidth: true
 
                     Text {
                         text: "Wifi"
                         color: ColorsConfig.palette.current.text
+
+                        Layout.fillWidth: true
                     }
 
                     Text {
                         text: "Wifi"
                         color: ColorsConfig.palette.current.text
+
+                        Layout.fillWidth: true
                     }
                 }
                 
@@ -108,6 +112,10 @@ ColumnLayout {
                 Text {
                     text: ""
                     color: ColorsConfig.palette.current.text
+
+                    Layout.alignment: Qt.AlignRight
+
+                    Layout.rightMargin: 10
                 }
             }
         }
@@ -143,7 +151,6 @@ ColumnLayout {
             RowLayout {
                 anchors.fill: parent
 
-                spacing: 10
 
                 Rectangle {
                     Layout.fillHeight: true
@@ -155,6 +162,8 @@ ColumnLayout {
 
 
                     Layout.margins: 5
+                    
+                    
 
 
                     Text {
@@ -171,11 +180,19 @@ ColumnLayout {
                 Text {
                     text: "Bluetooth"
                     color: ColorsConfig.palette.current.text
+
+                    
+                    Layout.fillWidth: true
+
                 }
 
                 Text {
                     text: ""
                     color: ColorsConfig.palette.current.text
+
+                    Layout.alignment: Qt.AlignRight
+
+                    Layout.rightMargin: 10
                 }
             }
         }
