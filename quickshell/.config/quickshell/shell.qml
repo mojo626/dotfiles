@@ -1,3 +1,5 @@
+//@ pragma UseQApplication
+
 import Quickshell // for PanelWindow
 import QtQuick // for Text
 import Quickshell.Io
@@ -5,6 +7,7 @@ import Quickshell.Hyprland
 import "modules/bar"
 import "modules/controlcenter"
 import "modules/launcher"
+import "modules/volumeosd"
 
 Scope {
 	id: shellroot
@@ -15,6 +18,8 @@ Scope {
 	Bar {}	
 	ControlCenter {}
 	Launcher {}
+
+	VolumeOSD {}
 
 	GlobalShortcut {
 		appid: "bar"

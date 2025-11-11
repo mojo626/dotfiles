@@ -20,7 +20,7 @@ RowLayout {
     }
 
 
-
+    //maybe do a dropdown for the system tray like windows does?
     Rectangle {
         Layout.fillWidth: true
         Layout.fillHeight: true
@@ -43,13 +43,35 @@ RowLayout {
 
                     radius: 100
 
-                    Layout.margins: 5
+                    Layout.margins: 7
 
                     Image {
                         source: modelData.icon
 
                         anchors.fill: parent
                         
+                    }
+
+                    MouseArea {
+                        anchors.fill: parent
+                        hoverEnabled: true
+                        acceptedButtons: Qt.AllButtons
+                        onClicked: {
+                            if (mouse.button == Qt.RightButton) {
+                                modelData.display(barWindow, 0, 0);
+                            } else if (mouse.button == Qt.LeftButton) {
+                                modelData.activate();
+                            } else if (mouse.button == Qt.MiddleButton) {
+                                modelData.secondaryActivate();
+                            }
+                            
+                        }
+                        onEntered: event => {
+                            
+                        }
+                        onExited: event => {
+                            
+                        }
                     }
 
                 }
