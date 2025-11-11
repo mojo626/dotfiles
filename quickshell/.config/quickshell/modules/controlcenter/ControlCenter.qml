@@ -36,7 +36,7 @@ Variants {
         color: "transparent"
 
         height: centerHeight
-        implicitWidth: 500
+        implicitWidth: 0
 
 
         Rectangle {
